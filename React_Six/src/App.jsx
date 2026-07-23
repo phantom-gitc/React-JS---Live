@@ -1,18 +1,12 @@
-import React, { useState } from 'react'
+import React, { useContext } from 'react'
 import Navbar from './components/Navbar'
 import ProductCard from './components/ProductCard'
 import Cart from './components/Cart'
 import { products } from './data/products'
+import { MyShop } from './context/MyWebsite'
 
 const App = () => {
-  // State to control active screen/view ('home' shows products, 'cart' shows shopping cart)
-  const [view, setView] = useState('home')
-
-
-  // State to store items currently in the cart
-  const [cartItems, setCartItems] = useState([])
-
-
+  const { view, setView, cartItems, setCartItems } = useContext(MyShop)
   // Adds a product to the cart or increments its quantity if it already exists
   const addToCart = (product) => {
     setCartItems((prevItems) => {
