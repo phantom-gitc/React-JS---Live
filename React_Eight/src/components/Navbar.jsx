@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
+import { Link, NavLink } from 'react-router';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState('Home');
 
   const navItems = [
-    { name: 'Home', href: '#' },
-    { name: 'About', href: '#' },
-    { name: 'Services', href: '#' },
-    { name: 'Contact', href: '#' },
+    { name: 'Home', to: '/' },
+    { name: 'About', to: '/about' },
+    { name: 'Services', to: '/services' },
+    { name: 'Contact', to: '/contact' },
   ];
 
   return (
@@ -16,35 +16,32 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="flex-shrink-0 flex items-center gap-2 cursor-pointer">
+          <Link to="/" className="flex-shrink-0 flex items-center gap-2 cursor-pointer decoration-none">
             <div className="w-8 h-8 rounded-lg bg-black flex items-center justify-center text-white font-bold text-lg shadow-sm">
               N
             </div>
             <span className="font-semibold text-lg tracking-tight text-gray-900">
               Minimal.
             </span>
-          </div>
+          </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-1">
             {navItems.map((item) => {
-              const isActive = activeTab === item.name;
               return (
-                <a
+                <NavLink
                   key={item.name}
-                  href={item.href}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setActiveTab(item.name);
-                  }}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-                    isActive
-                      ? 'text-gray-900 bg-gray-100/80 shadow-xs'
-                      : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
-                  }`}
+                  to={item.to}
+                  className={({ isActive }) =>
+                    `px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                      isActive
+                        ? 'text-gray-900 bg-gray-100/80 shadow-xs font-semibold'
+                        : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
+                    }`
+                  }
                 >
                   {item.name}
-                </a>
+                </NavLink>
               );
             })}
           </nav>
@@ -98,24 +95,21 @@ const Navbar = () => {
       {isOpen && (
         <div className="md:hidden border-b border-gray-100 bg-white/95 backdrop-blur-md px-4 pt-2 pb-4 space-y-1">
           {navItems.map((item) => {
-            const isActive = activeTab === item.name;
             return (
-              <a
+              <NavLink
                 key={item.name}
-                href={item.href}
-                onClick={(e) => {
-                  e.preventDefault();
-                  setActiveTab(item.name);
-                  setIsOpen(false);
-                }}
-                className={`block px-3 py-2 rounded-lg text-base font-medium transition-colors ${
-                  isActive
-                    ? 'bg-gray-100 text-gray-900'
-                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                }`}
+                to={item.to}
+                onClick={() => setIsOpen(false)}
+                className={({ isActive }) =>
+                  `block px-3 py-2 rounded-lg text-base font-medium transition-colors ${
+                    isActive
+                      ? 'bg-gray-100 text-gray-900 font-semibold'
+                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                  }`
+                }
               >
                 {item.name}
-              </a>
+              </NavLink>
             );
           })}
           <div className="pt-3 border-t border-gray-100 flex flex-col gap-2">

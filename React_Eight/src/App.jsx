@@ -1,15 +1,22 @@
 import React from 'react';
+import { Routes, Route } from 'react-router';
 import Navbar from './components/Navbar';
+import Home from './pages/Home';
+import About from './pages/About';
+import Services from './pages/Services';
+import Contacat from './pages/Contacat';
 
 const App = () => {
   return (
-    <div className="min-h-screen bg-slate-50 text-gray-900 font-sans antialiased">
+    <div className="min-h-screen bg-slate-50 text-gray-900 font-sans antialiased flex flex-col">
       <Navbar />
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
-        <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900 mb-4">
-        </h1>
-        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-        </p>
+      <main className="flex-grow">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/contact" element={<Contacat />} />
+        </Routes>
       </main>
     </div>
   );
