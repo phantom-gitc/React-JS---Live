@@ -2,18 +2,36 @@ import React, { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router";
 import { MyStore } from "../context/MyContext";
 
+// Single product details page component
 const ProductDetails = () => {
+  // Get product ID from URL params and navigation helper
   const { id } = useParams();
   const navigate = useNavigate();
-  const { singleProduct, singleLoading, getSingleProductData } = useContext(MyStore);
-  const [quantity, setQuantity] = useState(1);
 
+  // Access single product data and cart actions from store context
+  const { singleProduct, singleLoading, getSingleProductData, addToCart } = useContext(MyStore);
+
+  // Local quantity counter and button feedback state
+  const [quantity, setQuantity] = useState(1);
+  const [added, setAdded] = useState(false);
+
+  // Fetch product info whenever URL param id changes
   useEffect(() => {
     if (id) {
       getSingleProductData(id);
     }
   }, [id]);
 
+  // Handler to add item with selected quantity to cart
+  const handleAddToCart = () => {
+    if (singleProduct) {
+      addToCart(singleProduct, quantity);
+      setAdded(true);
+      setTimeout(() => setAdded(false), 2000);
+    }
+  };
+
+  // Show loading indicator while fetching item data
   if (singleLoading || (!singleProduct && singleLoading)) {
     return (
       <div className="w-full max-w-6xl mx-auto px-4 py-16 flex items-center justify-center min-h-[500px]">
@@ -25,6 +43,7 @@ const ProductDetails = () => {
     );
   }
 
+  // Show missing state if product data wasn't found
   if (!singleProduct) {
     return (
       <div className="w-full max-w-6xl mx-auto px-4 py-16 text-center">
@@ -44,7 +63,7 @@ const ProductDetails = () => {
 
   return (
     <div className="w-full max-w-6xl mx-auto px-4 py-8 md:py-12">
-      {/* Back Button */}
+      {/* Navigation button to return to previous page */}
       <button
         onClick={() => navigate(-1)}
         className="inline-flex items-center gap-2 text-xs font-medium text-zinc-500 hover:text-zinc-900 transition-colors mb-8 cursor-pointer group"
@@ -52,9 +71,9 @@ const ProductDetails = () => {
         <span className="group-hover:-translate-x-0.5 transition-transform">←</span> Back to products
       </button>
 
-      {/* Main Details Grid */}
+      {/* Main product view grid layout */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16 items-start">
-        {/* Left Column - Product Image */}
+        {/* Left image display box */}
         <div className="bg-white border border-zinc-200 rounded-2xl p-8 md:p-12 flex items-center justify-center min-h-[380px] md:min-h-[460px] relative overflow-hidden shadow-xs">
           {category && (
             <span className="absolute top-4 left-4 bg-zinc-900 text-zinc-100 text-[10px] uppercase tracking-wider font-semibold px-2.5 py-1 rounded-full">
@@ -68,7 +87,7 @@ const ProductDetails = () => {
           />
         </div>
 
-        {/* Right Column - Product Info */}
+        {/* Right product information column */}
         <div className="flex flex-col">
           <span className="text-xs font-semibold text-zinc-400 uppercase tracking-widest mb-2">
             {category}
@@ -78,7 +97,7 @@ const ProductDetails = () => {
             {title}
           </h1>
 
-          {/* Rating */}
+          {/* Star rating display */}
           {rating && (
             <div className="flex items-center gap-2 mt-3">
               <div className="flex items-center gap-1 text-sm font-medium text-zinc-700 bg-zinc-100 px-2.5 py-1 rounded-md">
@@ -89,14 +108,14 @@ const ProductDetails = () => {
             </div>
           )}
 
-          {/* Price */}
+          {/* Item price tag */}
           <div className="mt-6 pb-6 border-b border-zinc-200">
             <span className="text-3xl font-bold text-zinc-900 tracking-tight">
               ${price?.toFixed(2)}
             </span>
           </div>
 
-          {/* Description */}
+          {/* Detailed description text */}
           <div className="py-6 border-b border-zinc-200">
             <h3 className="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">
               Description
@@ -106,7 +125,7 @@ const ProductDetails = () => {
             </p>
           </div>
 
-          {/* Quantity & Actions */}
+          {/* Quantity selector and add to cart action */}
           <div className="py-6 flex flex-col gap-4">
             <div className="flex items-center gap-4">
               <span className="text-xs font-semibold text-zinc-700">Quantity</span>
@@ -130,8 +149,15 @@ const ProductDetails = () => {
             </div>
 
             <div className="flex gap-3 mt-2">
-              <button className="flex-1 px-6 py-3.5 bg-zinc-900 hover:bg-zinc-800 text-white text-xs font-semibold uppercase tracking-wider rounded-xl transition-colors shadow-xs cursor-pointer">
-                Add to Cart
+              <button
+                onClick={handleAddToCart}
+                className={`flex-1 px-6 py-3.5 text-xs font-semibold uppercase tracking-wider rounded-xl transition-all shadow-xs cursor-pointer ${
+                  added
+                    ? "bg-emerald-600 text-white"
+                    : "bg-zinc-900 hover:bg-zinc-800 text-white"
+                }`}
+              >
+                {added ? "Added to Cart ✓" : "Add to Cart"}
               </button>
               <button className="px-4 py-3.5 border border-zinc-200 hover:bg-zinc-100 text-zinc-700 text-xs font-semibold rounded-xl transition-colors cursor-pointer">
                 ♥
@@ -139,7 +165,7 @@ const ProductDetails = () => {
             </div>
           </div>
 
-          {/* Perks */}
+          {/* Policy and shipping perks */}
           <div className="mt-2 grid grid-cols-2 gap-4 p-4 bg-zinc-50 rounded-xl border border-zinc-100 text-xs text-zinc-600 font-medium">
             <div className="flex items-center gap-2">
               <span>🚚</span> Free standard shipping
