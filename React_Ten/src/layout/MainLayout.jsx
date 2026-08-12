@@ -4,13 +4,18 @@ import { Outlet } from 'react-router'
 
 const MainLayout = () => {
   return (
-    <div>
+    <div className="flex min-h-screen bg-[#F9FAFB] antialiased">
+      {/* Left Sidebar */}
+      <Navbar />
 
-        <Navbar/>
-        <Outlet/>
-
+      {/* Right Main Content */}
+      <main className="flex-1 overflow-y-auto p-8 md:p-10">
+        <div className="max-w-6xl mx-auto">
+          <Outlet />
+        </div>
+      </main>
     </div>
   )
 }
 
-export default MainLayout
+export default MainLayout

@@ -1,35 +1,67 @@
 import React from 'react'
-import { RouterProvider } from 'react-router'
-import { createBrowserRouter } from 'react-router'
-import Home from '../pages/Home'
-import About from '../pages/About'
-import Service from '../pages/Service'
+import { createBrowserRouter, RouterProvider } from 'react-router'
+import AuthLayout from '../layout/AuthLayout'
+import LoginPage from '../pages/LoginPage'
+import RegisterPage from '../pages/RegisterPage'
 import MainLayout from '../layout/MainLayout'
+import ProtectedRoutes from './ProtectedRoutes'
+import PublicRoutes from './PublicRoutes'
+import UserPage from '../pages/UserPage'
+import ProductPage from '../pages/ProductPage'
+import HomePage from '../pages/HomePage'
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <MainLayout/>,
+    path:'/',
+    element: <PublicRoutes />,
     children: [
       {
-        path: "",
-        element: <Home/>
-      },
+        path: '',
+        element: <AuthLayout />,
+        children: [
+          {
+            path: '',
+            element: <LoginPage />
+          },
+          {
+            path: 'login',
+            element: <LoginPage />
+          },
+          {
+            path: 'register',
+            element: <RegisterPage />
+          }
+        ]
+      }
+    ]
+  },
+  {
+    path: '/main',
+    element: <ProtectedRoutes />,
+    children: [
       {
-        path: "about",
-        element: <About/>
-      },
-      {
-        path: "service",
-        element: <Service/>
+        path: '',
+        element: <MainLayout />,
+        children : [{
+          path : '',
+          element : <HomePage />
+        },
+        {
+          path : 'product',
+          element : <ProductPage />
+        },
+        {
+          path : 'user',
+          element : <UserPage />
+        }
+        ]
       }
     ]
   }
- 
 ])
 
 const AppRoutes = () => {
-  return <RouterProvider router={router}/>
+  return <RouterProvider router={router} />
 }
 
 export default AppRoutes
