@@ -33,8 +33,8 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem("loginUser");
     };
 
-    console.log("Registered Users: ", registerUser);
-    console.log("Logged In User: ", loginUser);
+    // console.log("Registered Users: ", registerUser);
+    // console.log("Logged In User: ", loginUser);
 
     return (
         <Auth.Provider value={{ registerUser, setRegisterUser, loginUser, setLoginUser, logoutUser }}>
@@ -43,4 +43,4 @@ export const AuthProvider = ({ children }) => {
     );
 };
 
-export default AuthProvider;
+export default AuthProvider;
