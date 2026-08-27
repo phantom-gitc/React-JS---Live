@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useContext } from "react";
-import { ProductContext } from "../App";
+import React, { useEffect, useRef } from "react";
+import { useProducts } from "../context/ProductContext";
 
 const ProductCatalog = () => {
   const {
@@ -8,7 +8,7 @@ const ProductCatalog = () => {
     setFilteredData,
     searchData,
     setSearchData,
-  } = useContext(ProductContext);
+  } = useProducts();
 
   const lastCall = useRef(0);
 
@@ -21,6 +21,8 @@ const ProductCatalog = () => {
 
     setFilteredData(result);
   };
+
+  // Debouncing
 
   useEffect(() => {
     if (!searchData) {
@@ -36,6 +38,8 @@ const ProductCatalog = () => {
     return () => clearTimeout(timer);
   }, [searchData, productData]);
 
+  // Throttling
+  
   useEffect(() => {
     if (!searchData) return;
 

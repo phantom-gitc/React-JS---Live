@@ -1,9 +1,9 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Link, NavLink, Outlet } from "react-router";
-import { ProductContext } from "../App";
+import { useProducts } from "../context/ProductContext";
 
 const Layout = () => {
-  const { filteredData } = useContext(ProductContext);
+  const { filteredData } = useProducts();
 
   return (
     <div className="min-h-screen bg-[#f7f6f2] text-zinc-900">
